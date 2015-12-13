@@ -1,1 +1,2 @@
+include ':android_test_bq'
 include 'library', 'demo'
