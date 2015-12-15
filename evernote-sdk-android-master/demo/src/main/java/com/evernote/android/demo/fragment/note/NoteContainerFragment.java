@@ -45,7 +45,6 @@ public class NoteContainerFragment extends AbstractContainerFragment {
         Bundle args = new Bundle();
         args.putSerializable(KEY_NOTEBOOK, notebook);
         args.putSerializable(KEY_LINKED_NOTEBOOK, linkedNotebook);
-
         NoteContainerFragment fragment = new NoteContainerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,6 +62,7 @@ public class NoteContainerFragment extends AbstractContainerFragment {
 
         mNotebook = (Notebook) getArguments().getSerializable(KEY_NOTEBOOK);
         mLinkedNotebook = (LinkedNotebook) getArguments().getSerializable(KEY_LINKED_NOTEBOOK);
+
     }
 
     @Override

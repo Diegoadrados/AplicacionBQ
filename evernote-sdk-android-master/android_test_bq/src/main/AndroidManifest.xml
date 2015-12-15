@@ -27,6 +27,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name" />
         <activity android:name=".Logica_activity"></activity>
+        <activity android:name=".NoteDetailsActivity" android:label="@string/Nota"></activity>
     </application>
 
 </manifest>
