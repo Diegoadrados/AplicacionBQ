@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.evernote.client.android.OnClientCallback;
@@ -64,7 +65,7 @@ public class MainActivity extends Logica_activity {
         mArrayAdapter = new ArrayAdapter<String>(this, R.layout.list_item_notes, NotasTitulo);
         mListView = (ListView) findViewById(R.id.listView_main);
         mListView.setAdapter(mArrayAdapter);
-        findNotes();
+        //findNotes();
 
     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -79,7 +80,25 @@ public class MainActivity extends Logica_activity {
             startActivity(detailActivityIntent);
         }
     });
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.Tipos_de_orden, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                findNotes(i);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 }
 
     public void onError(Exception exception, String logstr, int id) {
@@ -88,11 +107,18 @@ public class MainActivity extends Logica_activity {
     }
 
     @SuppressWarnings("deprecation")
-    private void findNotes() {
+    private void findNotes(int i) {
         final int offset = 0;
-        int pageSize = 10;
+
         final NoteFilter filter = new NoteFilter();
-        filter.setOrder(NoteSortOrder.UPDATED.getValue());
+        if(i==0) { //selecionado orden por actualizacion en el desplegable
+            filter.setOrder(NoteSortOrder.UPDATED.getValue());
+            filter.setAscending(false);
+        }
+        else { //selecionado orden alfabético de los titulos en el desplegable
+            filter.setOrder(NoteSortOrder.TITLE.getValue());
+            filter.setAscending(true);
+        }
         final NotesMetadataResultSpec spec = new NotesMetadataResultSpec();
         spec.setIncludeTitle(true);
 
@@ -112,9 +138,12 @@ public class MainActivity extends Logica_activity {
                         size = (Integer) pairs.getValue() + size;
                     }
                     try {
+
                         final OnClientCallback<NotesMetadataList> callback = new OnClientCallback<NotesMetadataList>() {
                             @Override
                             public void onSuccess(NotesMetadataList data) {
+                                NotasTitulo.clear();
+                                NotasID.clear();
                                 Toast.makeText(getApplicationContext(), "Se actualizaron tus notas", Toast.LENGTH_LONG).show();
 
 
@@ -132,8 +161,8 @@ public class MainActivity extends Logica_activity {
                                 onError(exception, "Error listing notes. ", R.string.error_listing_notes);
                             }
                         };
-
                         mEvernoteSession.getClientFactory().createNoteStoreClient().findNotesMetadata(filter, offset, size, spec, callback);
+
                     } catch (TTransportException exception) {
                         onError(exception, "Error creating notestore. ", R.string.error_creating_notestore);
                     }

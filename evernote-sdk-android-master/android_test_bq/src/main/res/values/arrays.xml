@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Tipos_de_orden"> <item>Ultima actualización</item> <item>Título de nota</item></string-array>
+</resources>

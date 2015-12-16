@@ -17,4 +17,5 @@
     <string name="error_creating_notestore">Error creando la lista de notas</string>
     <string name="error_listing_notes">Error mostrando notas</string>
     <string name="Nota">Nota</string>
+    <string name="Ordenar">Ordenar según:</string>
 </resources>
